@@ -8,28 +8,29 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String userId;
-    private double amount;
+    
+    @Column(nullable = false)
+    private Double amount;
+    
+    @Column(nullable = false)
     private LocalDateTime timestamp;
-    private boolean suspicious;
-
-    public void setTimestamp(LocalDateTime now) {
-    }
-
-    public void setSuspicious(boolean suspicious) {
-        this.suspicious = suspicious;
-    }
-
-    public boolean isSuspicious() {
-        return suspicious;
-    }
-    public double getAmount() {
-        return this.amount;
+    
+    @Column(nullable = false)
+    private Boolean suspicious;
+    
+    @PrePersist
+    protected void onCreate() {
+        if (timestamp == null) {
+            timestamp = LocalDateTime.now();
+        }
     }
 }
